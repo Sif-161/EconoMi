@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:custom_sliding_segmented_control/custom_sliding_segmented_control.dart';
-import 'drawer.dart';
+import '../componentes/drawer.dart';
 
 class TelaConfig extends StatelessWidget {
   @override
@@ -65,6 +65,7 @@ class TelaConfig extends StatelessWidget {
         ),
       ),
       InkWell(
+        borderRadius: BorderRadius.circular(60),
         onTap: () {
           showDialog(
             context: context,

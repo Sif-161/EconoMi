@@ -1,8 +1,16 @@
+import 'package:controle_financeiro/telas/tela_inicio.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:adaptive_theme/adaptive_theme.dart';
-import 'tela_login.dart';
+import 'telas/tela_autenticacao.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
 void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   WidgetsFlutterBinding.ensureInitialized();
   final savedThemeMode = await AdaptiveTheme.getThemeMode();
   runApp(FinanceiroApp(savedThemeMode: savedThemeMode));
@@ -30,8 +38,27 @@ class FinanceiroApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: theme,
         darkTheme: darkTheme,
-        home: TelaLogin(),
+        home: const RoteadorTela(),
       ),
+      debugShowFloatingThemeButton: true,
+    );
+  }
+}
+
+class RoteadorTela extends StatelessWidget {
+  const RoteadorTela({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<User?>(
+      stream: FirebaseAuth.instance.authStateChanges(),
+      builder: (context, snapshot) {
+        if(snapshot.hasData) {
+          return TelaInicio();
+        } else {
+          return TelaAutenticacao();
+        }
+      },
     );
   }
 }

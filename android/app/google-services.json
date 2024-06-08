@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "79858515870",
+    "project_id": "economi-9e141",
+    "storage_bucket": "economi-9e141.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:79858515870:android:8d419db654ee5335c2208f",
+        "android_client_info": {
+          "package_name": "com.example.controle_financeiro"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "79858515870-5gnmb32dqgvpnarjpch42l9h4qbgf4cf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCsjype5QIQmCl76aeS2llETW4SlMsxvhs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "79858515870-5gnmb32dqgvpnarjpch42l9h4qbgf4cf.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "79858515870-b524l5crrghv2u9ujqsg2631csoabm7o.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.controleFinanceiro"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
