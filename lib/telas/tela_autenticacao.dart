@@ -1,9 +1,8 @@
 import 'package:controle_financeiro/componentes/snackbar.dart';
-import 'package:controle_financeiro/main.dart';
 import 'package:controle_financeiro/servicos/autenticacao_servico.dart';
 import 'package:flutter/material.dart';
 import '../componentes/decoracao_campo_autentificacao.dart';
-
+import 'package:flutter_signin_button/flutter_signin_button.dart';
 class TelaAutenticacao extends StatelessWidget {
   const TelaAutenticacao({super.key});
 
@@ -25,6 +24,17 @@ class TelaAutenticacao extends StatelessWidget {
             alignment: Alignment.center,
             child: Column(
               children: [
+                SizedBox(
+                  width: 350,
+                  child: SignInButton(
+                    text: 'Continuar com Google',
+                    Buttons.Google,
+                    onPressed: () async{
+                      await AutenticacaoServico().signInWithGoogle();
+                    },
+                  )
+                ),
+                const SizedBox(height: 8),
                 SizedBox(
                   width: 350,
                   child: ElevatedButton(
@@ -148,12 +158,9 @@ class _LoginState extends State<Login> {
                         ).then((String? erro){
                           if(erro != null){
                             mostrarSnackbar(context: context, mensagem: erro);
+                          } else {
+                            Navigator.pop(context);
                           }
-                          else{
-                            Navigator.pushReplacement(context, 
-                            MaterialPageRoute(
-                              builder: (context) => const RoteadorTela()));
-                          } 
                         });
                       }
                     },
@@ -291,9 +298,7 @@ class _CadastroState extends State<Cadastro> {
                             mostrarSnackbar(context: context, mensagem: erro);
                           }
                           else {
-                            Navigator.pushReplacement(context, 
-                            MaterialPageRoute(
-                              builder: (context) => const TelaAutenticacao()));
+                            Navigator.pop(context);
                           }
                         });
                       }

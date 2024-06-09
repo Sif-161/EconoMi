@@ -4,6 +4,8 @@ import 'package:custom_sliding_segmented_control/custom_sliding_segmented_contro
 import '../componentes/drawer.dart';
 
 class TelaConfig extends StatelessWidget {
+  static const String routeName = '/';
+  const TelaConfig({super.key});
   @override
   Widget build(BuildContext context) {
     List<Widget> ButtonsWidget = [

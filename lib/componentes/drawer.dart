@@ -1,21 +1,32 @@
 import 'package:controle_financeiro/servicos/autenticacao_servico.dart';
-
 import '../telas/tela_config.dart';
 import 'package:flutter/material.dart';
 import '../telas/tela_inicio.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class TelaDrawer extends StatelessWidget {
+  const TelaDrawer({super.key});
   @override
-
   Widget build(BuildContext context) {
-     const drawerHeader = UserAccountsDrawerHeader(
-      accountName: Text('Odilon Struduth'),
-      accountEmail: Text('netostruduth@gmail.com'),
+    final AutenticacaoServico autenticacaoServico = AutenticacaoServico();
+    final User? currentUser = autenticacaoServico.firebaseAuth.currentUser;
+
+      final drawerHeader = UserAccountsDrawerHeader(
+      accountName: Text(currentUser != null ? currentUser.displayName ?? '' : ''),
+      accountEmail: Text(currentUser != null ? currentUser.email ?? '' : ''),
       currentAccountPicture: CircleAvatar(
         backgroundColor: Colors.white,
-        child: FlutterLogo(size: 42.0),
-      ) 
+        child: currentUser != null
+            ? currentUser.photoURL != null
+                ? Image.network(currentUser.photoURL!)
+                : const FlutterLogo(size: 42.0)
+            : const FlutterLogo(size: 42.0),
+      ),
+      decoration: const BoxDecoration(
+        color: Colors.blue,
+      ),
     );
+
     final drawerItens = ListView(
       children: <Widget>[
         drawerHeader,
@@ -47,7 +58,7 @@ class TelaDrawer extends StatelessWidget {
           leading: const Icon(Icons.logout, color: Colors.blue),
           title: const Text('Sair'),
           onTap: () {
-            AutenticacaoServico().deslogarUsuario();
+            autenticacaoServico.deslogarUsuario();
           },
         ),
       ],

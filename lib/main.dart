@@ -51,12 +51,16 @@ class RoteadorTela extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<User?>(
-      stream: FirebaseAuth.instance.authStateChanges(),
+      stream: FirebaseAuth.instance.userChanges(),
       builder: (context, snapshot) {
-        if(snapshot.hasData) {
-          return TelaInicio();
+        if (snapshot.hasData) {
+          return const TelaInicio();
+        } else if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
         } else {
-          return TelaAutenticacao();
+          return snapshot.connectionState == ConnectionState.waiting
+             ? const Center(child: CircularProgressIndicator())
+              : const TelaAutenticacao();
         }
       },
     );

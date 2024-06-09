@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 class AutenticacaoServico{
-  FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 
   Future<String?> cadastrarUsuario ({
     required String nome,
@@ -8,7 +9,7 @@ class AutenticacaoServico{
     required String senha,
   }) async {
     try {
-      UserCredential userCredencial = await _firebaseAuth.createUserWithEmailAndPassword(
+      UserCredential userCredencial = await firebaseAuth.createUserWithEmailAndPassword(
         email: email,
         password: senha
       );
@@ -24,7 +25,7 @@ class AutenticacaoServico{
   }
   Future<String?> logarUsuario ({required String email, required String senha}) async {
     try {
-      await _firebaseAuth.signInWithEmailAndPassword(
+      await firebaseAuth.signInWithEmailAndPassword(
         email: email,
         password: senha
       );
@@ -37,6 +38,19 @@ class AutenticacaoServico{
     }
   }
   Future<void> deslogarUsuario() async {
-    await _firebaseAuth.signOut();
+    await firebaseAuth.signOut();
+  }
+  Future<User?> signInWithGoogle() async{
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+    final GoogleSignInAuthentication googleAuth = await googleUser!.authentication;
+
+    final AuthCredential credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
+    );
+    final UserCredential userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
+    return userCredential.user;
   }
 }
+
