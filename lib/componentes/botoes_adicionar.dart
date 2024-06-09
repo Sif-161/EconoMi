@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../telas/tela_inicio.dart';
+import '../componentes/decoracao_campo_autentificacao.dart';
 class CustomIconButton extends StatefulWidget {
   final IconData icon;
   final String label;
@@ -31,7 +33,7 @@ class _CustomIconButtonState extends State<CustomIconButton> {
               setState(() {
                 _isPressed = !_isPressed;
               });
-              _ShowModal().then((_){
+              _showModal().then((_){
                 setState(() {
                   _isPressed = false;
                 });
@@ -50,34 +52,79 @@ class _CustomIconButtonState extends State<CustomIconButton> {
       ],
     );
   }
-  Future<void> _ShowModal() async{
+  Future<void> _showModal() async{
     await showModalBottomSheet(
       context: context,
+      isScrollControlled: true,
       builder: (BuildContext context){
-        return Container(
-          height: 300,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Column(
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.only(right: 20, top: 20),
-                    
-                    child: Text(''),//mostrar os numeros do numpad aqui
-                  ),
-                  //numpad
-                  GridView.count(
-                    crossAxisCount: 3,
-                    shrinkWrap: true,
-                    children: List.generate(9, (index) => InkWell(
-                    )),
-                  )
-                ],
-              )
-            ]
+        return Padding(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
           ),
-          
+          child: Container(
+            height: 300,
+            decoration: BoxDecoration(
+              color: themeData.colorScheme.surface,
+              boxShadow: const [
+                BoxShadow(
+                  color: Colors.blue,
+                  spreadRadius: 5,
+                  blurRadius: 10,
+                   offset: Offset(0, -10),
+                )
+              ]
+            ),
+            padding: const EdgeInsets.all(20),
+            child: Form(
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Row(
+                      children: [
+                        const Icon(Icons.description),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: TextFormField(
+                            decoration: getAuthenticationInputDecoration('Descrição', context),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 15),
+                    Row(
+                      children: [
+                        const Icon(Icons.attach_money),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: TextFormField(
+                            keyboardType: TextInputType.number,
+                            decoration: getAuthenticationInputDecoration('Valor', context),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+                    Material(
+                      color: Colors.blue,
+                      shape: const CircleBorder(),
+                      elevation: 10,
+                      child: IconButton(
+                        onPressed: (){
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(builder: (context) => const TelaInicio()),
+                          );
+                        },
+                        icon: Icon(Icons.check, color: themeData.colorScheme.inverseSurface),
+                        iconSize: 40,
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ),
         );
       }
     );

@@ -6,9 +6,36 @@ import '../componentes/drawer.dart';
 class TelaConfig extends StatelessWidget {
   static const String routeName = '/';
   const TelaConfig({super.key});
-  @override
+
+
+  AppBar buildAppBar(BuildContext context) {
+    final themeData = Theme.of(context);
+    final themeMode = AdaptiveTheme.of(context).mode;
+
+    Color backgroundColor;
+    if (themeMode == AdaptiveThemeMode.light) {
+      backgroundColor = Colors.blue;
+    } else if (themeMode == AdaptiveThemeMode.dark) {
+      backgroundColor = themeData.colorScheme.surface;
+    } else if (themeMode == AdaptiveThemeMode.system) {
+      backgroundColor = MediaQuery.platformBrightnessOf(context) == Brightness.light
+        ? themeData.colorScheme.primary
+        : themeData.colorScheme.surface;
+    } else {
+      backgroundColor = themeData.colorScheme.surface;
+    }
+    return AppBar(
+      backgroundColor: backgroundColor,
+      centerTitle: true,
+      title: const Text('Configurações'),
+    );
+  }
+
+
+
+  
   Widget build(BuildContext context) {
-    List<Widget> ButtonsWidget = [
+    List<Widget> _buttonsWidget = [
       Container(
         padding: const EdgeInsets.all(8),
         child: Row(
@@ -100,11 +127,8 @@ class TelaConfig extends StatelessWidget {
   ];
     
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: const Text('Configurações'),
-      ),
-      drawer: Drawer(
+      appBar: buildAppBar(context),
+      drawer: const Drawer(
         child: TelaDrawer(),
       ),
       body: Column(
@@ -113,7 +137,7 @@ class TelaConfig extends StatelessWidget {
           SizedBox(
             width: double.infinity,
             child: Column(
-              children: ButtonsWidget
+              children: _buttonsWidget
             ),
           )
         ]

@@ -26,7 +26,7 @@ class TelaDrawer extends StatelessWidget {
         color: Colors.blue,
       ),
     );
-
+    /* Adicionar os itens do drawer em todas as telas */
     final drawerItens = ListView(
       children: <Widget>[
         drawerHeader,
@@ -51,7 +51,7 @@ class TelaDrawer extends StatelessWidget {
           leading: const Icon(Icons.settings, color: Colors.blue),
           title: const Text('Configurações'),
           onTap: () => Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => TelaConfig()),
+            MaterialPageRoute(builder: (context) => const TelaConfig()),
           ),
         ),
         ListTile(
