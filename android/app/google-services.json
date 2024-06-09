@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "79858515870-1v56iupbm2nvae2u799i5a9f5bauet2q.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.controle_financeiro",
+            "certificate_hash": "f95420a401af003069ef8bb936ac876067fba2e6"
+          }
+        },
+        {
           "client_id": "79858515870-5gnmb32dqgvpnarjpch42l9h4qbgf4cf.apps.googleusercontent.com",
           "client_type": 3
         }
