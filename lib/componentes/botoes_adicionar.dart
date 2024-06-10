@@ -18,6 +18,7 @@ class CustomIconButton extends StatefulWidget {
 class _CustomIconButtonState extends State<CustomIconButton> {
   bool _isPressed = false;
   late ThemeData themeData;
+  DateTime? selectedDate;
 
   @override
   Widget build(BuildContext context) {
@@ -26,12 +27,12 @@ class _CustomIconButtonState extends State<CustomIconButton> {
       children: [
         Material(
           shape: const CircleBorder(),
-          color: _isPressed ? Colors.blue : Colors.blue.withOpacity(0.2),
+          color: _isPressed? Colors.blue : Colors.blue.withOpacity(0.2),
           elevation: 10,
           child: IconButton(
             onPressed: () {
               setState(() {
-                _isPressed = !_isPressed;
+                _isPressed =!_isPressed;
               });
               _showModal().then((_){
                 setState(() {
@@ -52,6 +53,7 @@ class _CustomIconButtonState extends State<CustomIconButton> {
       ],
     );
   }
+
   Future<void> _showModal() async{
     await showModalBottomSheet(
       context: context,
@@ -110,7 +112,18 @@ class _CustomIconButtonState extends State<CustomIconButton> {
                       shape: const CircleBorder(),
                       elevation: 10,
                       child: IconButton(
-                        onPressed: (){
+                        onPressed: () async {
+                          final DateTime? pickedDate = await showDatePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime(2020),
+                            lastDate: DateTime(2030),
+                          );
+                          if (pickedDate!= null) {
+                            setState(() {
+                              selectedDate = pickedDate;
+                            });
+                          }
                           Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(builder: (context) => const TelaInicio()),
