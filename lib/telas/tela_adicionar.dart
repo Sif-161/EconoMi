@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:controle_financeiro/componentes/botoes_adicionar.dart';
 import 'package:custom_sliding_segmented_control/custom_sliding_segmented_control.dart';
-import 'package:adaptive_theme/adaptive_theme.dart';
+import'../componentes/appbar_personalizada.dart';
 
 class TelaAdicionar extends StatefulWidget{
   const TelaAdicionar({super.key});
@@ -79,47 +79,27 @@ class TelaAdicionarState extends State<TelaAdicionar>{
   ];
 
   //personalização da appbar para quando o tema estiver claro a appbar ficara azul
-  AppBar buildAppBar(BuildContext context) {
-    final themeData = Theme.of(context);
-    final themeMode = AdaptiveTheme.of(context).mode;
-
-    Color backgroundColor;
-    if (themeMode == AdaptiveThemeMode.light) {
-      backgroundColor = Colors.blue;
-    } else if (themeMode == AdaptiveThemeMode.dark) {
-      backgroundColor = themeData.colorScheme.surface;
-    } else if (themeMode == AdaptiveThemeMode.system) {
-      backgroundColor = MediaQuery.platformBrightnessOf(context) == Brightness.light
-         ? themeData.colorScheme.primary
-        : themeData.colorScheme.surface;
-    } else {
-      backgroundColor = themeData.colorScheme.surface;
-    }
-  return AppBar(
-    backgroundColor: backgroundColor,
-    centerTitle: true,
-    leadingWidth: 80,
-    leading: TextButton(
-      onPressed: () {
-        Navigator.pop(context);
-      },
-      child: Text(
-        'Cancelar',
-        style: TextStyle(
-          color: themeData.colorScheme.inverseSurface,
-          fontSize: 14,
-          fontWeight: FontWeight.normal
-        ),
-      ),
-    ),
-    title: const Text('Adicionar'),
-  );
-}
+  
   @override
   Widget build(BuildContext context) {
     themeData = Theme.of(context);
     return Scaffold(
-      appBar: buildAppBar(context),
+      appBar: CustomAppBar(
+        leading: TextButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: Text(
+            'Cancelar',
+            style: TextStyle(
+              color: themeData.colorScheme.inverseSurface,
+              fontSize: 14,
+              fontWeight: FontWeight.normal
+            ),
+          )
+        ),
+        title: 'Adicionar',
+      ),
       body: Column(
         children: [
           Padding(

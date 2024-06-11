@@ -25,7 +25,7 @@ class TelaAutenticacao extends StatelessWidget {
             child: Column(
               children: [
                 SizedBox(
-                  width: 350,
+                  width: 345,
                   child: SignInButton(
                     text: 'Continuar com Google',
                     Buttons.Google,
@@ -34,7 +34,7 @@ class TelaAutenticacao extends StatelessWidget {
                     },
                   )
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 10),
                 SizedBox(
                   width: 350,
                   child: ElevatedButton(

@@ -1,6 +1,9 @@
+import 'package:controle_financeiro/modelos/lista_modelos.dart';
+import 'package:controle_financeiro/servicos/adicionar_servico.dart';
 import 'package:flutter/material.dart';
-import '../telas/tela_inicio.dart';
+import 'package:uuid/uuid.dart';
 import '../componentes/decoracao_campo_autentificacao.dart';
+
 class CustomIconButton extends StatefulWidget {
   final IconData icon;
   final String label;
@@ -16,6 +19,12 @@ class CustomIconButton extends StatefulWidget {
 }
 
 class _CustomIconButtonState extends State<CustomIconButton> {
+  final TextEditingController _descCtrl = TextEditingController();
+  final TextEditingController _valorCtrl = TextEditingController();
+
+  AdicionarServico adicionarServico = AdicionarServico();
+
+  bool isCarregando = false;
   bool _isPressed = false;
   late ThemeData themeData;
   DateTime? selectedDate;
@@ -54,6 +63,29 @@ class _CustomIconButtonState extends State<CustomIconButton> {
     );
   }
 
+  enviarClicado(){
+      setState(() {
+        isCarregando = true;
+      });
+
+      String descricao = _descCtrl.text;
+      double valor = double.parse(_valorCtrl.text);
+
+      AdicionarModelo adicionar = AdicionarModelo(
+        id: const Uuid().v1(),
+        tipo: widget.label,
+        valor: valor,
+        data: selectedDate ?? DateTime.now(),
+        descricao: descricao,
+      );
+
+      adicionarServico.adicionarDespesas(adicionar).then((value){
+        setState(() {
+          isCarregando = true;
+        });
+      });
+    }
+
   Future<void> _showModal() async{
     await showModalBottomSheet(
       context: context,
@@ -88,6 +120,7 @@ class _CustomIconButtonState extends State<CustomIconButton> {
                         const SizedBox(width: 8),
                         Expanded(
                           child: TextFormField(
+                            controller: _descCtrl,
                             decoration: getAuthenticationInputDecoration('Descrição', context),
                           ),
                         ),
@@ -101,6 +134,7 @@ class _CustomIconButtonState extends State<CustomIconButton> {
                         Expanded(
                           child: TextFormField(
                             keyboardType: TextInputType.number,
+                            controller: _valorCtrl,
                             decoration: getAuthenticationInputDecoration('Valor', context),
                           ),
                         ),
@@ -112,22 +146,8 @@ class _CustomIconButtonState extends State<CustomIconButton> {
                       shape: const CircleBorder(),
                       elevation: 10,
                       child: IconButton(
-                        onPressed: () async {
-                          final DateTime? pickedDate = await showDatePicker(
-                            context: context,
-                            initialDate: DateTime.now(),
-                            firstDate: DateTime(2020),
-                            lastDate: DateTime(2030),
-                          );
-                          if (pickedDate!= null) {
-                            setState(() {
-                              selectedDate = pickedDate;
-                            });
-                          }
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(builder: (context) => const TelaInicio()),
-                          );
+                        onPressed: () {
+                          enviarClicado();
                         },
                         icon: Icon(Icons.check, color: themeData.colorScheme.inverseSurface),
                         iconSize: 40,

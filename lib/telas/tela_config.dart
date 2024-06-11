@@ -2,39 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:custom_sliding_segmented_control/custom_sliding_segmented_control.dart';
 import '../componentes/drawer.dart';
+import '../componentes/appbar_personalizada.dart';
 
 class TelaConfig extends StatelessWidget {
   static const String routeName = '/';
   const TelaConfig({super.key});
 
-
-  AppBar buildAppBar(BuildContext context) {
-    final themeData = Theme.of(context);
-    final themeMode = AdaptiveTheme.of(context).mode;
-
-    Color backgroundColor;
-    if (themeMode == AdaptiveThemeMode.light) {
-      backgroundColor = Colors.blue;
-    } else if (themeMode == AdaptiveThemeMode.dark) {
-      backgroundColor = themeData.colorScheme.surface;
-    } else if (themeMode == AdaptiveThemeMode.system) {
-      backgroundColor = MediaQuery.platformBrightnessOf(context) == Brightness.light
-        ? themeData.colorScheme.primary
-        : themeData.colorScheme.surface;
-    } else {
-      backgroundColor = themeData.colorScheme.surface;
-    }
-    return AppBar(
-      backgroundColor: backgroundColor,
-      centerTitle: true,
-      title: const Text('Configurações'),
-    );
-  }
-
-
-
-  
+  @override
   Widget build(BuildContext context) {
+
     List<Widget> _buttonsWidget = [
       Container(
         padding: const EdgeInsets.all(8),
@@ -125,9 +101,8 @@ class TelaConfig extends StatelessWidget {
         ),
       ),
   ];
-    
     return Scaffold(
-      appBar: buildAppBar(context),
+      appBar: const CustomAppBar(title: 'Configurações'),
       drawer: const Drawer(
         child: TelaDrawer(),
       ),
