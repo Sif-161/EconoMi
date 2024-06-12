@@ -1,8 +1,11 @@
+import 'package:controle_financeiro/modelos/categoria_modelo.dart';
 import 'package:controle_financeiro/modelos/lista_modelos.dart';
-import 'package:controle_financeiro/servicos/adicionar_servico.dart';
+import 'package:controle_financeiro/servicos/fireStore_servico.dart';
+import 'package:controle_financeiro/telas/tela_inicio.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 import '../componentes/decoracao_campo_autentificacao.dart';
+import 'package:provider/provider.dart';
 
 class CustomIconButton extends StatefulWidget {
   final IconData icon;
@@ -19,10 +22,10 @@ class CustomIconButton extends StatefulWidget {
 }
 
 class _CustomIconButtonState extends State<CustomIconButton> {
-  final TextEditingController _descCtrl = TextEditingController();
+  final TextEditingController _notaCtrl = TextEditingController();
   final TextEditingController _valorCtrl = TextEditingController();
 
-  AdicionarServico adicionarServico = AdicionarServico();
+  FireSoreServico adicionarServico = FireSoreServico();
 
   bool isCarregando = false;
   bool _isPressed = false;
@@ -68,15 +71,17 @@ class _CustomIconButtonState extends State<CustomIconButton> {
         isCarregando = true;
       });
 
-      String descricao = _descCtrl.text;
+      String nota = _notaCtrl.text;
       double valor = double.parse(_valorCtrl.text);
+      CategoriaModelo categoria = Provider.of<CategoriaModelo>(context, listen: false);
 
       AdicionarModelo adicionar = AdicionarModelo(
         id: const Uuid().v1(),
         tipo: widget.label,
         valor: valor,
         data: selectedDate ?? DateTime.now(),
-        descricao: descricao,
+        nota: nota,
+        categoria: categoria.selectedCategory,
       );
 
       adicionarServico.adicionarDespesas(adicionar).then((value){
@@ -84,6 +89,9 @@ class _CustomIconButtonState extends State<CustomIconButton> {
           isCarregando = true;
         });
       });
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => const TelaInicio()));
     }
 
   Future<void> _showModal() async{
@@ -120,8 +128,8 @@ class _CustomIconButtonState extends State<CustomIconButton> {
                         const SizedBox(width: 8),
                         Expanded(
                           child: TextFormField(
-                            controller: _descCtrl,
-                            decoration: getAuthenticationInputDecoration('Descrição', context),
+                            controller: _notaCtrl,
+                            decoration: getAuthenticationInputDecoration('Nota', context),
                           ),
                         ),
                       ],
@@ -136,6 +144,12 @@ class _CustomIconButtonState extends State<CustomIconButton> {
                             keyboardType: TextInputType.number,
                             controller: _valorCtrl,
                             decoration: getAuthenticationInputDecoration('Valor', context),
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Por favor, insira um valor';
+                              }
+                              return null;
+                            },
                           ),
                         ),
                       ],
@@ -147,6 +161,7 @@ class _CustomIconButtonState extends State<CustomIconButton> {
                       elevation: 10,
                       child: IconButton(
                         onPressed: () {
+                          
                           enviarClicado();
                         },
                         icon: Icon(Icons.check, color: themeData.colorScheme.inverseSurface),

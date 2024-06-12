@@ -1,3 +1,4 @@
+import 'package:controle_financeiro/modelos/categoria_modelo.dart';
 import 'package:controle_financeiro/telas/tela_inicio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -5,6 +6,7 @@ import 'package:adaptive_theme/adaptive_theme.dart';
 import 'telas/tela_autenticacao.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'package:provider/provider.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -13,7 +15,14 @@ void main() async{
   );
   WidgetsFlutterBinding.ensureInitialized();
   final savedThemeMode = await AdaptiveTheme.getThemeMode();
-  runApp(FinanceiroApp(savedThemeMode: savedThemeMode));
+  runApp(
+    MultiProvider(
+      providers: [
+         ChangeNotifierProvider(create: (_) => CategoriaModelo()),
+      ],
+      child: FinanceiroApp(savedThemeMode: savedThemeMode),
+    )
+  );
 }
 
 class FinanceiroApp extends StatelessWidget {

@@ -1,10 +1,13 @@
+import 'package:controle_financeiro/modelos/categoria_modelo.dart';
 import 'package:flutter/material.dart';
 import 'package:controle_financeiro/componentes/botoes_adicionar.dart';
 import 'package:custom_sliding_segmented_control/custom_sliding_segmented_control.dart';
 import'../componentes/appbar_personalizada.dart';
+import 'package:provider/provider.dart';
 
 class TelaAdicionar extends StatefulWidget{
   const TelaAdicionar({super.key});
+  
 
   @override
   State<StatefulWidget> createState() => TelaAdicionarState();
@@ -13,6 +16,7 @@ class TelaAdicionar extends StatefulWidget{
 class TelaAdicionarState extends State<TelaAdicionar>{
   late ThemeData themeData;
   int _currentSegment = 0;
+
 
   //lista dos botões organizada por grupo
   final List<List<CustomIconButton>> _iconButtonGroups = [
@@ -56,6 +60,10 @@ class TelaAdicionarState extends State<TelaAdicionar>{
       CustomIconButton(
         icon: Icons.school,
         label: 'Educação',
+      ),
+      CustomIconButton(
+        icon: Icons.beach_access,
+        label: 'Lazer',
       ),
     ],
     const [
@@ -134,6 +142,10 @@ class TelaAdicionarState extends State<TelaAdicionar>{
                 ]
               ),
               onValueChanged: (value) {
+                Provider.of<CategoriaModelo>(
+                  context,
+                  listen: false
+                ).setSelectedCategory(value == 0 ? 'Despesas' : 'Rendas');
                 setState(() {
                   _currentSegment = value;
                 });
