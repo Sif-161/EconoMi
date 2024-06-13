@@ -8,40 +8,52 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:provider/provider.dart';
 
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
   WidgetsFlutterBinding.ensureInitialized();
+
   final savedThemeMode = await AdaptiveTheme.getThemeMode();
+
+  // Inicia o aplicativo usando MultiProvider para gerenciamento de estado
   runApp(
     MultiProvider(
       providers: [
-         ChangeNotifierProvider(create: (_) => CategoriaModelo()),
+        // Provedor para CategoriaModelo
+        ChangeNotifierProvider(create: (_) => CategoriaModelo()),
       ],
+      // Inicia o app principal com o tema salvo
       child: FinanceiroApp(savedThemeMode: savedThemeMode),
-    )
+    ),
   );
 }
 
 class FinanceiroApp extends StatelessWidget {
   final AdaptiveThemeMode? savedThemeMode;
+
+  // Construtor da classe FinanceiroApp que recebe o modo de tema salvo
   const FinanceiroApp({super.key, this.savedThemeMode});
 
   @override
   Widget build(BuildContext context) {
     return AdaptiveTheme(
+      // Define o tema claro
       light: ThemeData(
         useMaterial3: true,
         brightness: Brightness.light,
         colorSchemeSeed: Colors.blue,
       ),
+      // Define o tema escuro
       dark: ThemeData(
         useMaterial3: true,
         brightness: Brightness.dark,
         colorSchemeSeed: Colors.blue,
       ),
+      // Define o tema inicial do aplicativo como padrão do sistema de acordo com o dispositivo
       initial: savedThemeMode ?? AdaptiveThemeMode.system,
       builder: (theme, darkTheme) => MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -60,15 +72,19 @@ class RoteadorTela extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<User?>(
+      // Escuta mudanças na autenticação do usuário
       stream: FirebaseAuth.instance.userChanges(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
+          // Se houver dados do usuário, navega para TelaInicio
           return const TelaInicio();
         } else if (snapshot.hasError) {
+          // Se houver erro, exibe a mensagem de erro
           return Text('Error: ${snapshot.error}');
         } else {
+          // Se estiver aguardando ou sem dados, mostra um indicador de carregamento ou TelaAutenticacao
           return snapshot.connectionState == ConnectionState.waiting
-             ? const Center(child: CircularProgressIndicator())
+              ? const Center(child: CircularProgressIndicator())
               : const TelaAutenticacao();
         }
       },

@@ -5,18 +5,18 @@ import '../componentes/drawer.dart';
 import '../componentes/appbar_personalizada.dart';
 
 class TelaConfig extends StatelessWidget {
-  static const String routeName = '/';
   const TelaConfig({super.key});
 
   @override
   Widget build(BuildContext context) {
 
+    // Lista de widgets de botões
     List<Widget> _buttonsWidget = [
       Container(
         padding: const EdgeInsets.all(8),
         child: Row(
           children: [
-            const Icon(Icons.palette_outlined, color: Colors.blue,),
+            const Icon(Icons.palette_outlined, color: Colors.blue), 
             const SizedBox(width: 8),
             const Text('Tema:', style: TextStyle(fontSize: 17)),
             const Spacer(),
@@ -27,7 +27,7 @@ class TelaConfig extends StatelessWidget {
                   ? 1
                   : AdaptiveTheme.of(context).mode == AdaptiveThemeMode.dark
                   ? 2
-                  : 3,
+                  : 3, // Define o valor inicial do controle deslizante com base no tema atual
                   children: const {
                     1: Icon(Icons.light_mode),
                     2: Icon(Icons.dark_mode),
@@ -60,7 +60,7 @@ class TelaConfig extends StatelessWidget {
                           ? AdaptiveThemeMode.light
                           : tema == 2
                               ? AdaptiveThemeMode.dark
-                              : AdaptiveThemeMode.system,
+                              : AdaptiveThemeMode.system, // Atualiza o modo de tema com base na seleção do usuário
                     );
                   },
                 )
@@ -102,7 +102,7 @@ class TelaConfig extends StatelessWidget {
       ),
   ];
     return Scaffold(
-      appBar: const CustomAppBar(title: 'Configurações'),
+      appBar: const CustomAppBar(title: 'Configurações'),
       drawer: const Drawer(
         child: TelaDrawer(),
       ),
@@ -112,7 +112,7 @@ class TelaConfig extends StatelessWidget {
           SizedBox(
             width: double.infinity,
             child: Column(
-              children: _buttonsWidget
+              children: _buttonsWidget // Adiciona os widgets de botões à coluna
             ),
           )
         ]

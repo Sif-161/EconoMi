@@ -16,6 +16,7 @@ InputDecoration getAuthenticationInputDecoration(String label, BuildContext cont
     contentPadding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
     border: OutlineInputBorder(
       borderRadius: BorderRadius.circular(64),
+      borderSide: BorderSide(color: borderColor),
     ),
     enabledBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(64),

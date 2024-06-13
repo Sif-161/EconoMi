@@ -1,24 +1,23 @@
-import 'package:controle_financeiro/modelos/categoria_modelo.dart';
+import 'package:controle_financeiro/modelos/categoria_modelo.dart'; // Importa o modelo de categoria
 import 'package:flutter/material.dart';
-import 'package:controle_financeiro/componentes/botoes_adicionar.dart';
-import 'package:custom_sliding_segmented_control/custom_sliding_segmented_control.dart';
-import'../componentes/appbar_personalizada.dart';
-import 'package:provider/provider.dart';
+import 'package:controle_financeiro/componentes/botoes_adicionar.dart'; // Importa os botões personalizados
+import 'package:custom_sliding_segmented_control/custom_sliding_segmented_control.dart'; 
+import '../componentes/appbar_personalizada.dart'; 
+import 'package:provider/provider.dart'; // Importa o Provider para gerenciamento de estado
 
-class TelaAdicionar extends StatefulWidget{
+class TelaAdicionar extends StatefulWidget {
   const TelaAdicionar({super.key});
-  
 
   @override
   State<StatefulWidget> createState() => TelaAdicionarState();
 }
 
-class TelaAdicionarState extends State<TelaAdicionar>{
-  late ThemeData themeData;
-  int _currentSegment = 0;
 
+class TelaAdicionarState extends State<TelaAdicionar> {
+  late ThemeData themeData; // Variável para armazenar o tema atual
+  int _currentSegment = 0; // Variável para armazenar o segmento atual (Despesas ou Rendas)
 
-  //lista dos botões organizada por grupo
+  // Lista dos botões organizada por grupo (Despesas e Rendas)
   final List<List<CustomIconButton>> _iconButtonGroups = [
     const [
       CustomIconButton(
@@ -43,7 +42,7 @@ class TelaAdicionarState extends State<TelaAdicionar>{
       ),
       CustomIconButton(
         icon: Icons.directions_car,
-      label: 'Carro',
+        label: 'Carro',
       ),
       CustomIconButton(
         icon: Icons.local_hospital,
@@ -68,29 +67,27 @@ class TelaAdicionarState extends State<TelaAdicionar>{
     ],
     const [
       CustomIconButton(
-        icon: Icons.monetization_on, 
-        label: 'Salário'
+        icon: Icons.monetization_on,
+        label: 'Salário',
       ),
       CustomIconButton(
-        icon: Icons.trending_up, 
-        label: 'Investimentos'
+        icon: Icons.trending_up,
+        label: 'Investimentos',
       ),
       CustomIconButton(
-        icon: Icons.access_time, 
-        label: 'Meio Período'
+        icon: Icons.access_time,
+        label: 'Meio Período',
       ),
       CustomIconButton(
-        icon: Icons.card_giftcard, 
-        label: 'Prêmios'
+        icon: Icons.card_giftcard,
+        label: 'Prêmios',
       ),
     ]
   ];
 
-  //personalização da appbar para quando o tema estiver claro a appbar ficara azul
-  
   @override
   Widget build(BuildContext context) {
-    themeData = Theme.of(context);
+    themeData = Theme.of(context); // Obtém o tema atual
     return Scaffold(
       appBar: CustomAppBar(
         leading: TextButton(
@@ -102,9 +99,9 @@ class TelaAdicionarState extends State<TelaAdicionar>{
             style: TextStyle(
               color: themeData.colorScheme.inverseSurface,
               fontSize: 14,
-              fontWeight: FontWeight.normal
+              fontWeight: FontWeight.normal,
             ),
-          )
+          ),
         ),
         title: 'Adicionar',
       ),
@@ -115,17 +112,17 @@ class TelaAdicionarState extends State<TelaAdicionar>{
             child: CustomSlidingSegmentedControl(
               children: const {
                 0: Text('Despesas'),
-                1: Text('Rendas'),
-              }, 
+                1: Text('Rendas'), 
+              },
               decoration: BoxDecoration(
                 color: themeData.colorScheme.background,
                 borderRadius: BorderRadius.circular(8),
                 boxShadow: [
                   BoxShadow(
                     color: themeData.colorScheme.inverseSurface,
-                    spreadRadius: 1.5
-                  )
-                ]
+                    spreadRadius: 1.5,
+                  ),
+                ],
               ),
               thumbDecoration: BoxDecoration(
                 color: Colors.blue.withOpacity(0.3),
@@ -137,31 +134,31 @@ class TelaAdicionarState extends State<TelaAdicionar>{
                     offset: const Offset(
                       0.0,
                       0.2,
-                    )
-                  )   
-                ]
+                    ),
+                  ),
+                ],
               ),
               onValueChanged: (value) {
                 Provider.of<CategoriaModelo>(
                   context,
-                  listen: false
-                ).setSelectedCategory(value == 0 ? 'Despesas' : 'Rendas');
+                  listen: false,
+                ).setSelectedCategory(value == 0 ? 'Despesas' : 'Rendas'); // Atualiza a categoria selecionada no Provider
                 setState(() {
-                  _currentSegment = value;
+                  _currentSegment = value; // Atualiza o segmento atual
                 });
               },
-              initialValue: _currentSegment,
+              initialValue: _currentSegment, // Define o valor inicial do segmento
             ),
           ),
           Expanded(
             child: GridView.count(
               padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
               crossAxisCount: 3,
-              children: _iconButtonGroups[_currentSegment],
+              children: _iconButtonGroups[_currentSegment], // Exibe os botões correspondentes ao segmento atual
             ),
-          )
-        ]
-      )
+          ),
+        ],
+      ),
     );
   }
 }

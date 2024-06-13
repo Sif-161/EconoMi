@@ -1,17 +1,21 @@
 import 'package:controle_financeiro/servicos/autenticacao_servico.dart';
-import '../telas/tela_config.dart';
 import 'package:flutter/material.dart';
-import '../telas/tela_inicio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import '../telas/tela_config.dart';
+import '../telas/tela_inicio.dart';
 
 class TelaDrawer extends StatelessWidget {
-  const TelaDrawer({super.key});
+  const TelaDrawer({Key? key});
+
   @override
   Widget build(BuildContext context) {
     final AutenticacaoServico autenticacaoServico = AutenticacaoServico();
+
+    // Obtém o usuário atualmente logado
     final User? currentUser = autenticacaoServico.firebaseAuth.currentUser;
 
-      final drawerHeader = UserAccountsDrawerHeader(
+    // Cabeçalho do Drawer exibindo informações do usuário logado
+    final drawerHeader = UserAccountsDrawerHeader(
       accountName: Text(currentUser != null ? currentUser.displayName ?? '' : ''),
       accountEmail: Text(currentUser != null ? currentUser.email ?? '' : ''),
       currentAccountPicture: CircleAvatar(
@@ -26,10 +30,13 @@ class TelaDrawer extends StatelessWidget {
         color: Colors.blue,
       ),
     );
-    /* Adicionar os itens do drawer em todas as telas */
-    final drawerItens = ListView(
+
+    // Itens do Drawer
+    final drawerItems = ListView(
       children: <Widget>[
-        drawerHeader,
+        drawerHeader, // Adiciona o cabeçalho ao Drawer
+
+        // Item "Início"
         ListTile(
           leading: const Icon(Icons.home, color: Colors.blue,),
           title: const Text('Inicio'),
@@ -37,23 +44,33 @@ class TelaDrawer extends StatelessWidget {
             MaterialPageRoute(builder: (context) => const TelaInicio()),
           ),
         ),
+
+        // Item "Gráfico"
         ListTile(
           leading: const Icon(Icons.pie_chart, color: Colors.blue),
-          title: const Text('Grafico'),
-          onTap: () {},
+          title: const Text('Gráfico'),
+          onTap: () {
+          },
         ),
+
+        // Item "Relatório"
         ListTile(
           leading: const Icon(Icons.receipt_long, color: Colors.blue),
-          title: const Text('Relatorio'),
-          onTap: () {},
+          title: const Text('Relatório'),
+          onTap: () {
+          },
         ),
+
+        // Item "Configurações"
         ListTile(
           leading: const Icon(Icons.settings, color: Colors.blue),
-          title: const Text('Configurações'),
+          title: const Text('Configurações'),
           onTap: () => Navigator.of(context).push(
             MaterialPageRoute(builder: (context) => const TelaConfig()),
           ),
         ),
+
+        // Item "Sair"
         ListTile(
           leading: const Icon(Icons.logout, color: Colors.blue),
           title: const Text('Sair'),
@@ -63,6 +80,7 @@ class TelaDrawer extends StatelessWidget {
         ),
       ],
     );
-    return drawerItens;
+
+    return drawerItems; // Retorna a lista de itens do Drawer
   }
 }

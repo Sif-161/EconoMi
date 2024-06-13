@@ -1,22 +1,20 @@
 import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:flutter/material.dart';
 
-/*personalização da appbar para quando 
-  o tema estiver claro a appbar ficara azul
-  (obs: utilizar em todas as telas que possuam uma appbar)
-*/
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final Widget? leading;
   final List<Widget>? actions;
+  final PreferredSizeWidget? bottom;
 
   const CustomAppBar({
     super.key,
     required this.title,
     this.leading,
     this.actions,
+    this.bottom, 
   });
-  
+
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
@@ -34,6 +32,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     } else {
       backgroundColor = themeData.colorScheme.surface;
     }
+
     return AppBar(
       backgroundColor: backgroundColor,
       centerTitle: true,
@@ -41,8 +40,10 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       title: Text(title),
       leading: leading,
       actions: actions,
+      bottom: bottom,
     );
   }
+
   @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+  Size get preferredSize => Size.fromHeight(kToolbarHeight + (bottom?.preferredSize.height ?? 0.0)); // Adjust preferred size
 }

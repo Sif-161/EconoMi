@@ -2,7 +2,8 @@ import 'package:controle_financeiro/componentes/snackbar.dart';
 import 'package:controle_financeiro/servicos/autenticacao_servico.dart';
 import 'package:flutter/material.dart';
 import '../componentes/decoracao_campo_autentificacao.dart';
-import 'package:flutter_signin_button/flutter_signin_button.dart';
+import 'package:flutter_signin_button/flutter_signin_button.dart'; 
+
 class TelaAutenticacao extends StatelessWidget {
   const TelaAutenticacao({super.key});
 
@@ -30,7 +31,7 @@ class TelaAutenticacao extends StatelessWidget {
                     text: 'Continuar com Google',
                     Buttons.Google,
                     onPressed: () async{
-                      await AutenticacaoServico().signInWithGoogle();
+                      await AutenticacaoServico().signInWithGoogle(); // Autenticação com Google
                     },
                   )
                 ),
@@ -92,11 +93,12 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  final _formKeyLogin = GlobalKey<FormState>();
+  final _formKeyLogin = GlobalKey<FormState>(); // Chave global para o formulário de login
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _senhaController = TextEditingController();
 
-  AutenticacaoServico _autenticacaoServico = AutenticacaoServico();
+  AutenticacaoServico _autenticacaoServico = AutenticacaoServico(); // Instância do serviço de autenticação
+  bool _isLoading = false; // Estado para indicar carregamento
 
   @override
   Widget build(BuildContext context) {
@@ -124,10 +126,10 @@ class _LoginState extends State<Login> {
                     decoration: getAuthenticationInputDecoration('E-mail', context),
                     validator: (String? value) {
                       if (value == null || value.isEmpty) {
-                        return 'Preencha o campo';
+                        return 'Preencha o campo'; // Validação do campo de e-mail
                       }
                       if (value.length < 5 || !value.contains('@')) {
-                        return 'E-mail inválido';
+                        return 'E-mail inválido'; // Validação do e-mail
                       }
                       return null;
                     },
@@ -138,10 +140,10 @@ class _LoginState extends State<Login> {
                     decoration: getAuthenticationInputDecoration('Senha', context),
                     validator: (String? value) {
                       if (value == null || value.isEmpty) {
-                        return 'Preencha o campo';
+                        return 'Preencha o campo'; // Validação do campo de senha
                       }
                       if (value.length < 6) {
-                        return 'A senha deve conter no minimo 6 caracteres';
+                        return 'A senha deve conter no minimo 6 caracteres'; // Validação da senha
                       }
                       return null;
                     },
@@ -150,27 +152,33 @@ class _LoginState extends State<Login> {
                   const SizedBox(height: 16),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
-                    onPressed: () {
-                      if (_formKeyLogin.currentState!.validate()) {
-                        _autenticacaoServico.logarUsuario(
-                          email: _emailController.text,
-                          senha: _senhaController.text
-                        ).then((String? erro){
+                    onPressed: _isLoading ? null : () async {
+                        if (_formKeyLogin.currentState!.validate()) {
+                          setState(() {
+                            _isLoading = true;
+                          });
+                          String? erro = await _autenticacaoServico.logarUsuario(
+                            email: _emailController.text,
+                            senha: _senhaController.text
+                          );
+                          setState(() {
+                            _isLoading = false;
+                          });
                           if(erro != null){
-                            mostrarSnackbar(context: context, mensagem: erro);
+                            mostrarSnackbar(context: context, mensagem: erro); // Mostra Snackbar em caso de erro
                           } else {
-                            Navigator.pop(context);
+                            Navigator.pop(context); // Volta para a tela anterior em caso de sucesso
                           }
-                        });
-                      }
-                    },
-                    child: Text(
-                      'Entrar',
-                      style: TextStyle(
-                        fontSize: 16,
-                         color: Theme.of(context).colorScheme.inverseSurface
+                        }
+                      },
+                      child: _isLoading ? const CircularProgressIndicator(color: Colors.white)
+                      : Text(
+                          'Entrar',
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Theme.of(context).colorScheme.inverseSurface
+                          ),
                         ),
-                    ),
                   ),
                 ],
               ),
@@ -190,13 +198,13 @@ class Cadastro extends StatefulWidget {
 }
 
 class _CadastroState extends State<Cadastro> {
-  final _formKeyCadastro = GlobalKey<FormState>();
+  final _formKeyCadastro = GlobalKey<FormState>(); // Chave global para o formulário de cadastro
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _nomeController = TextEditingController();
   final TextEditingController _senhaController = TextEditingController();
   final TextEditingController _confirmarSenhaController = TextEditingController();
 
-  AutenticacaoServico _autenticacaoServico = AutenticacaoServico();
+  AutenticacaoServico _autenticacaoServico = AutenticacaoServico(); // Instância do serviço de autenticação
 
   @override
   void dispose() {
@@ -231,10 +239,10 @@ class _CadastroState extends State<Cadastro> {
                     decoration: getAuthenticationInputDecoration('Nome', context),
                     validator: (String? value) {
                       if (value == null || value.isEmpty) {
-                        return 'Preencha o campo';
+                        return 'Preencha o campo'; // Validação do campo de nome
                       }
                       if (value.length < 6) {
-                        return 'O nome deve conter no minimo 6 caracteres';
+                        return 'O nome deve conter no minimo 6 caracteres'; // Validação do nome
                       }
                       return null;
                     },
@@ -245,10 +253,10 @@ class _CadastroState extends State<Cadastro> {
                     decoration: getAuthenticationInputDecoration('E-mail', context),
                     validator: (String? value) {
                       if (value == null || value.isEmpty) {
-                        return 'Preencha o campo';
+                        return 'Preencha o campo'; // Validação do campo de e-mail
                       }
                       if (value.length < 5 || !value.contains('@')) {
-                        return 'E-mail inválido';
+                        return 'E-mail inválido'; // Validação do e-mail
                       }
                       return null;
                     },
@@ -259,10 +267,10 @@ class _CadastroState extends State<Cadastro> {
                     decoration: getAuthenticationInputDecoration('Senha', context),
                     validator: (String? value) {
                       if (value == null || value.isEmpty) {
-                        return 'Preencha o campo';
+                        return 'Preencha o campo'; // Validação do campo de senha
                       }
                       if (value.length < 6) {
-                        return 'A senha deve conter no minimo 6 caracteres';
+                        return 'A senha deve conter no minimo 6 caracteres'; // Validação da senha
                       }
                       return null;
                     },
@@ -274,10 +282,10 @@ class _CadastroState extends State<Cadastro> {
                     decoration: getAuthenticationInputDecoration('Confirme a senha', context),
                     validator: (String? value) {
                       if (value == null || value.isEmpty) {
-                        return 'Preencha o campo';
+                        return 'Preencha o campo'; // Validação do campo de confirmação de senha
                       }
                       if (value != _senhaController.text) {
-                        return 'As senhas não coincidem';
+                        return 'As senhas não coincidem'; // Validação da correspondência das senhas
                       }
                       return null;
                     },
@@ -295,10 +303,10 @@ class _CadastroState extends State<Cadastro> {
                         ).then((String? erro){
                           //voltou com erro
                           if (erro != null) {
-                            mostrarSnackbar(context: context, mensagem: erro);
+                            mostrarSnackbar(context: context, mensagem: erro); // Mostra Snackbar em caso de erro
                           }
                           else {
-                            Navigator.pop(context);
+                            Navigator.pop(context); // Volta para a tela anterior em caso de sucesso
                           }
                         });
                       }
@@ -319,5 +327,4 @@ class _CadastroState extends State<Cadastro> {
       ),
     );
   }
-
 }
