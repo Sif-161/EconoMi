@@ -29,6 +29,7 @@ class _TelaGraficoState extends State<TelaGrafico> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
+                // Dropdown para selecionar o ano
                 Row(
                   children: [
                     const Text("Ano: "),
@@ -39,8 +40,14 @@ class _TelaGraficoState extends State<TelaGrafico> {
                           selectedYear = newValue!;
                         });
                       },
-                      items: <String>['2020', '2021', '2022', '2023', '2024', '2025']
-                          .map<DropdownMenuItem<String>>((String value) {
+                      items: <String>[
+                        '2020',
+                        '2021',
+                        '2022',
+                        '2023',
+                        '2024',
+                        '2025'
+                      ].map<DropdownMenuItem<String>>((String value) {
                         return DropdownMenuItem<String>(
                           value: value,
                           child: Text(value),
@@ -49,6 +56,7 @@ class _TelaGraficoState extends State<TelaGrafico> {
                     ),
                   ],
                 ),
+                // Dropdown para selecionar o mês
                 Row(
                   children: [
                     const Text("Mês: "),
@@ -74,7 +82,7 @@ class _TelaGraficoState extends State<TelaGrafico> {
           ),
           Expanded(
             child: StreamBuilder(
-              stream: _servico.conectarStreamDespesas(),
+              stream: _servico.conectarStreamDespesas(), // Stream para obter dados de despesas
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());
@@ -91,6 +99,7 @@ class _TelaGraficoState extends State<TelaGrafico> {
                     return const Center(child: Text('Nenhum item encontrado para o período selecionado!'));
                   }
 
+                  // Cálculo das categorias e valores
                   Map<String, double> categorias = {};
                   for (var item in listaItens) {
                     if (categorias.containsKey(item.tipo)) {
@@ -100,18 +109,20 @@ class _TelaGraficoState extends State<TelaGrafico> {
                     }
                   }
 
-                  double total = categorias.values.reduce((a, b) => a + b);
+                  double total = categorias.values.reduce((a, b) => a + b); // Total dos valores
 
+                  // Ordenação das categorias por valor
                   List<MapEntry<String, double>> categoriasEscolhida = categorias.entries.toList()
                     ..sort((a, b) => b.value.compareTo(a.value));
                   List<String> categoriasTop4 = categoriasEscolhida.take(4).map((e) => e.key).toList();
                   List<double> categoriasTop4Valores = categoriasEscolhida.take(4).map((e) => e.value).toList();
-                  double outros = total - categoriasTop4Valores.reduce((a, b) => a + b);
+                  double outros = total - categoriasTop4Valores.reduce((a, b) => a + b); // Valor restante
 
-                  List<Color> colors = Colors.primaries;
+                  List<Color> colors = Colors.primaries; // Cores para o gráfico
 
                   return Column(
                     children: [
+                      // Gráfico de pizza
                       Padding(
                         padding: const EdgeInsets.all(16.0),
                         child: Row(
@@ -153,6 +164,7 @@ class _TelaGraficoState extends State<TelaGrafico> {
                               ),
                             ),
                             const SizedBox(width: 16),
+                            // Legenda das categorias
                             Flexible(
                               flex: 1,
                               child: Column(
@@ -182,6 +194,7 @@ class _TelaGraficoState extends State<TelaGrafico> {
                                       ],
                                     );
                                   }),
+                                  // Categoria 'Outros'
                                   Row(
                                     children: [
                                       Container(
@@ -209,6 +222,7 @@ class _TelaGraficoState extends State<TelaGrafico> {
                         ),
                       ),
                       const SizedBox(height: 16),
+                      // Lista de categorias com valores e porcentagens
                       Expanded(
                         child: ListView(
                           children: [
@@ -233,6 +247,7 @@ class _TelaGraficoState extends State<TelaGrafico> {
                                       ],
                                     ),
                                     const SizedBox(height: 4),
+                                    // Barra de progresso
                                     LinearProgressIndicator(
                                       value: entry.value / total,
                                       color: Colors.blue,
