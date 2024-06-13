@@ -1,4 +1,5 @@
 import 'package:controle_financeiro/servicos/autenticacao_servico.dart';
+import 'package:controle_financeiro/telas/tala_graficos.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../telas/tela_config.dart';
@@ -49,8 +50,9 @@ class TelaDrawer extends StatelessWidget {
         ListTile(
           leading: const Icon(Icons.pie_chart, color: Colors.blue),
           title: const Text('Gráfico'),
-          onTap: () {
-          },
+          onTap: () => Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => TelaGrafico()),
+          ),
         ),
 
         // Item "Relatório"
