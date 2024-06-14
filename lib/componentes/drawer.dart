@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../telas/tela_config.dart';
 import '../telas/tela_inicio.dart';
+import '../telas/tela_relatorio.dart';
 
 class TelaDrawer extends StatelessWidget {
   const TelaDrawer({Key? key});
@@ -59,8 +60,9 @@ class TelaDrawer extends StatelessWidget {
         ListTile(
           leading: const Icon(Icons.receipt_long, color: Colors.blue),
           title: const Text('Relatório'),
-          onTap: () {
-          },
+          onTap: () => Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => FinancePage()),
+          ),
         ),
 
         // Item "Configurações"
